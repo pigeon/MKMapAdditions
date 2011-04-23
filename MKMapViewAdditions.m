@@ -1,9 +1,7 @@
 //
 //  MKViewAdditions.m
-//  UA_ATMs
 //
 //  Created by Dmytro Golub on 3/27/11.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
 #import "MKMapViewAdditions.h"
@@ -55,15 +53,12 @@ NSString* NSStringFromMKCoordinateRegion(MKCoordinateRegion region)
 
 -(void) setBBox:(MKMapBoundingBox) bbox
 {
-	//LOG(@"%@",NSStringFromDGDGBoundingBox(bbox));
 	MKCoordinateRegion region;
 	region.span.latitudeDelta = - bbox.southwest.latitude + bbox.northeast.latitude;
 	region.span.longitudeDelta = bbox.northeast.longitude - bbox.southwest.longitude;
 	
 	region.center = CLLocationCoordinate2DMake((bbox.northeast.latitude - region.span.latitudeDelta/2),
 											   bbox.northeast.longitude - region.span.longitudeDelta/2);
-	
-	//LOG(@"%@",NSStringFromMKCoordinateRegion(region));
 	
 	[self setRegion:region];
 }
