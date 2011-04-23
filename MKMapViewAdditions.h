@@ -14,6 +14,11 @@ typedef struct {
 	CLLocationCoordinate2D southwest;
 } MKMapBoundingBox;
 
+typedef struct {
+	double width;
+	double height;
+} MKMapSizeInMeters;
+
 
 MKMapBoundingBox DGBoundingBoxMake(CLLocationCoordinate2D northeast,CLLocationCoordinate2D southwest); 
 NSString* NSStringFromDGDGBoundingBox(MKMapBoundingBox bbox);
@@ -27,6 +32,8 @@ NSString* NSStringFromDGDGBoundingBox(MKMapBoundingBox bbox);
 -(BOOL) isPreviousMapPositionKnown;
 - (MKCoordinateRegion) loadMapPosition;
 - (void) saveMapPosition;
+
+-(MKMapSizeInMeters) currentBBoxSize;
 
 
 @end

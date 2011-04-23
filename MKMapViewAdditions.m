@@ -106,5 +106,15 @@ NSString* NSStringFromMKCoordinateRegion(MKCoordinateRegion region)
 	[[NSUserDefaults standardUserDefaults] synchronize];
 }
 
-
+-(MKMapSizeInMeters) currentBBoxSize
+{
+	MKMapBoundingBox bbox = [self bboxForMap];
+	CLLocation* leftTop     = [[CLLocation alloc] initWithLatitude:bbox.northeast.latitude longitude:bbox.southwest.longitude];
+	CLLocation* ne = [[CLLocation alloc] initWithLatitude:bbox.northeast.latitude longitude:bbox.northeast.longitude];
+	CLLocation* sw = [[CLLocation alloc] initWithLatitude:bbox.southwest.latitude longitude:bbox.southwest.longitude];
+	
+	double distanceX = [leftTop distanceFromLocation:ne];
+	double distanceY = [leftTop distanceFromLocation:sw];
+	return (MKMapSizeInMeters){distanceX,distanceY};		
+}
 @end
