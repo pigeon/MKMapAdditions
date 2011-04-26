@@ -19,8 +19,12 @@ typedef struct {
 	double height;
 } MKMapSizeInMeters;
 
+#define kMaxLong 180 
+#define kMaxLat 90
 
-MKMapBoundingBox DGBoundingBoxMake(CLLocationCoordinate2D northeast,CLLocationCoordinate2D southwest); 
+
+
+MKMapBoundingBox MKBoundingBoxMake(CLLocationCoordinate2D northeast,CLLocationCoordinate2D southwest); 
 NSString* NSStringFromDGDGBoundingBox(MKMapBoundingBox bbox);
 
 @interface MKMapView (BBox) 
@@ -34,6 +38,6 @@ NSString* NSStringFromDGDGBoundingBox(MKMapBoundingBox bbox);
 - (void) saveMapPosition;
 
 -(MKMapSizeInMeters) currentBBoxSize;
-
+-(MKMapBoundingBox) findBBoxWithCoordinates:(NSArray*) arrayOfCoordinates;
 
 @end

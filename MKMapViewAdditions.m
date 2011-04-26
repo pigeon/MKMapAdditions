@@ -14,7 +14,12 @@
 #define kMapLocationSpanLng @"kMapLocationSpanLng"
 
 
-MKMapBoundingBox DGBoundingBoxMake(CLLocationCoordinate2D northeast,CLLocationCoordinate2D southwest)
+static const double kRMMinLatitude = -kMaxLat;
+static const double kRMMaxLatitude = kMaxLat;
+static const double kRMMinLongitude = -kMaxLong;
+static const double kRMMaxLongitude = kMaxLong;
+
+MKMapBoundingBox MKBoundingBoxMake(CLLocationCoordinate2D northeast,CLLocationCoordinate2D southwest)
 {
 	MKMapBoundingBox bbox;
 	bbox.northeast = northeast;
@@ -48,7 +53,7 @@ NSString* NSStringFromMKCoordinateRegion(MKCoordinateRegion region)
 	northEastCorner.longitude = center.longitude - (region.span.longitudeDelta / 2.0);
 	southWestCorner.latitude  = center.latitude  + (region.span.latitudeDelta  / 2.0);
 	southWestCorner.longitude = center.longitude + (region.span.longitudeDelta / 2.0); 	
-	return DGBoundingBoxMake(northEastCorner,southWestCorner);
+	return MKBoundingBoxMake(northEastCorner,southWestCorner);
 }
 
 -(void) setBBox:(MKMapBoundingBox) bbox
@@ -117,4 +122,40 @@ NSString* NSStringFromMKCoordinateRegion(MKCoordinateRegion region)
 	double distanceY = [leftTop distanceFromLocation:sw];
 	return (MKMapSizeInMeters){distanceX,distanceY};		
 }
+
+-(MKMapBoundingBox) findBBoxWithCoordinates:(NSArray*) arrayOfCoordinates
+{
+	
+	CLLocationCoordinate2D atmLocation;
+	
+	float minLat = kRMMaxLatitude;
+	float minLng = kRMMaxLongitude;
+	
+	float maxLat = kRMMinLatitude;
+	float maxLng = kRMMinLongitude;	
+	
+	for (id obj in arrayOfCoordinates)
+	{	
+		//atmLocation.latitude =   atm.coordinate.latitude;
+		//atmLocation.longitude =  atm.coordinate.longitude;
+		
+		atmLocation = [obj coordinate];
+				
+		minLat = (minLat > atmLocation.latitude)? atmLocation.latitude : minLat;
+		minLng = (minLng > atmLocation.longitude)? atmLocation.longitude : minLng;
+		
+		maxLat = (maxLat < atmLocation.latitude)? atmLocation.latitude : maxLat;
+		maxLng = (maxLng < atmLocation.longitude)? atmLocation.longitude : maxLng;		
+	}
+	
+	CLLocationCoordinate2D ne = (CLLocationCoordinate2D){maxLat,maxLng};
+	CLLocationCoordinate2D sw = (CLLocationCoordinate2D){minLat,minLng};
+	
+	return MKBoundingBoxMake(ne,sw);
+	
+	//LOG(@"{%f,%f,%f,%f}",maxLat,maxLng,minLat,minLng);
+	
+}
+
+
 @end
